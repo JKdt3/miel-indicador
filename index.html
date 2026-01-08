@@ -106,10 +106,12 @@
           tbody.appendChild(tr);
         }
 
-        // Fecha/hora local del navegador como “actualización” (simple).
-        const now = new Date();
-        document.getElementById("actualizacion").textContent =
-          "Actualización: " + now.toLocaleString("es-ES");
+        // Mostrar fecha/semana tomada del CSV (campo "actualizado")
+if (rows.length > 0 && rows[0].actualizado) {
+  document.getElementById("actualizacion").textContent =
+    "Actualización: " + rows[0].actualizado;
+}
+
 
       } catch (e) {
         errorEl.textContent = "Error: " + (e?.message ?? e);
