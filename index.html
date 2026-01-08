@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Indicador orientativo - Miel</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 24px; line-height: 1.4; }
+    header { margin-bottom: 16px; }
+    h1 { margin: 0 0 6pxpx 0; font-size: 22px; }
+    .note { max-width: 900px; padding: 12px 14px; background: #f6f7f9; border: 1px solid #e5e7eb; border-radius: 10px; }
+    .meta { color: #555; font-size: 14px; margin-top: 8px; }
+    table { border-collapse: collapse; width: 100%; max-width: 900px; margin-top: 16px; }
+    th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: left; }
+    th { background: #fafafa; }
+    .right { text-align: right; }
+    .error { color: #b00020; margin-top: 12px; }
+    footer { margin-top: 18px; color: #666; font-size: 12px; max-width: 900px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Indicador orientativo de precios de miel</h1>
+    <div class="note">
+      <strong>Aviso importante:</strong> Datos con carácter meramente informativo y orientativo. No constituyen precios oficiales ni referencia de mercado.
+      El titular de la web no asume responsabilidad por el uso que terceros puedan hacer de esta información.
+      <div class="meta" id="actualizacion">Actualización: —</div>
+    </div>
+  </header>
+
+  <table id="tabla">
+    <thead>
+      <tr>
+        <th>Tipo de miel</th>
+        <th class="right">Precio mín (€ / kg)</th>
+        <th class="right">Precio máx (€ / kg)</th>
+        <th>Periodo</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="error" id="error"></div>
+
+  <footer>
+    Metodología (resumen): valores agregados en forma de rangos, pensados para orientar. Si quieres, luego añadimos una página “Metodología” y “Aviso legal” separadas.
+  </footer>
+
+  <script>
+    // Lee precios.csv, lo parsea y lo pinta en una tabla.
+    // Todo ocurre en el navegador: esto es una "web estática".
+    const CSV_URL = "./precios.csv";
+
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/);
+      const headers = lines[0].split(",").map(h => h.trim());
+      return lines.slice(1).map(line => {
+        const cols = line.split(",").map(c => c.trim());
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = cols[i] ?? "");
+        return obj;
+      });
+    }
+
+    function formatEUR(value) {
+      const n = Number(value);
+      if (!isFinite(n)) return value;
+      return n.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    async function loadAndRender() {
+      const errorEl = document.getElementById("error");
+      errorEl.textContent = "";
+
+      const tbody = document.querySelector("#tabla tbody");
+      tbody.innerHTML = "";
+
+      try {
+        const res = await fetch(CSV_URL, { cache: "no-store" });
+        if (!res.ok) throw new Error("No se pudo cargar precios.csv (" + res.status + ")");
+
+        const text = await res.text();
+        const rows = parseCSV(text);
+
+        for (const r of rows) {
+          const tr = document.createElement("tr");
+
+          const tdTipo = document.createElement("td");
+          tdTipo.textContent = r.tipo_miel || "";
+          tr.appendChild(tdTipo);
+
+          const tdMin = document.createElement("td");
+          tdMin.className = "right";
+          tdMin.textContent = formatEUR(r.precio_min);
+          tr.appendChild(tdMin);
+
+          const tdMax = document.createElement("td");
+          tdMax.className = "right";
+          tdMax.textContent = formatEUR(r.precio_max);
+          tr.appendChild(tdMax);
+
+          const tdPer = document.createElement("td");
+          tdPer.textContent = r.periodo || "";
+          tr.appendChild(tdPer);
+
+          tbody.appendChild(tr);
+        }
+
+        // Fecha/hora local del navegador como “actualización” (simple).
+        const now = new Date();
+        document.getElementById("actualizacion").textContent =
+          "Actualización: " + now.toLocaleString("es-ES");
+
+      } catch (e) {
+        errorEl.textContent = "Error: " + (e?.message ?? e);
+      }
+    }
+
+    loadAndRender();
+  </script>
+</body>
+</html>
