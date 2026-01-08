@@ -7,7 +7,7 @@
   <style>
     body { font-family: system-ui, Arial, sans-serif; margin: 24px; line-height: 1.4; }
     header { margin-bottom: 16px; }
-    h1 { margin: 0 0 6pxpx 0; font-size: 22px; }
+    h1 { margin: 0 0 6px 0; font-size: 22px; }
     .note { max-width: 900px; padding: 12px 14px; background: #f6f7f9; border: 1px solid #e5e7eb; border-radius: 10px; }
     .meta { color: #555; font-size: 14px; margin-top: 8px; }
     table { border-collapse: collapse; width: 100%; max-width: 900px; margin-top: 16px; }
@@ -43,12 +43,10 @@
   <div class="error" id="error"></div>
 
   <footer>
-    Metodología (resumen): valores agregados en forma de rangos, pensados para orientar. 
+    Metodología (resumen): valores agregados en forma de rangos, pensados para orientar.
   </footer>
 
   <script>
-    // Lee precios.csv, lo parsea y lo pinta en una tabla.
-    // Todo ocurre en el navegador: esto es una "web estática".
     const CSV_URL = "./precios.csv";
 
     function parseCSV(text) {
@@ -57,7 +55,7 @@
       return lines.slice(1).map(line => {
         const cols = line.split(",").map(c => c.trim());
         const obj = {};
-        headers.forEach((h, i) => obj[h] = cols[i] ?? "");
+        headers.forEach((h, i) => obj[h] = (cols[i] ?? ""));
         return obj;
       });
     }
@@ -82,6 +80,7 @@
         const text = await res.text();
         const rows = parseCSV(text);
 
+        // Tabla
         for (const r of rows) {
           const tr = document.createElement("tr");
 
@@ -106,12 +105,9 @@
           tbody.appendChild(tr);
         }
 
-        // Mostrar fecha/semana tomada del CSV (campo "actualizado")
-if (rows.length > 0 && rows[0].actualizado) {
-  document.getElementById("actualizacion").textContent =
-    "Actualización: " + rows[0].actualizado;
-}
-
+        // Actualización DESDE EL CSV (campo "actualizado")
+        const actualizado = (rows[0] && rows[0].actualizado) ? rows[0].actualizado : "";
+        document.getElementById("actualizacion").textContent = "Actualización: " + (actualizado || "—");
 
       } catch (e) {
         errorEl.textContent = "Error: " + (e?.message ?? e);
