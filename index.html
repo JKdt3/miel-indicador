@@ -4,53 +4,337 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Indicador orientativo - Miel</title>
+
   <style>
-    body { font-family: system-ui, Arial, sans-serif; margin: 24px; line-height: 1.4; }
-    header { margin-bottom: 16px; }
-    h1 { margin: 0 0 6px 0; font-size: 22px; }
-    .note { max-width: 900px; padding: 12px 14px; background: #f6f7f9; border: 1px solid #e5e7eb; border-radius: 10px; }
-    .meta { color: #555; font-size: 14px; margin-top: 8px; }
-    table { border-collapse: collapse; width: 100%; max-width: 900px; margin-top: 16px; }
-    th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: left; }
-    th { background: #fafafa; }
-    .right { text-align: right; }
-    .error { color: #b00020; margin-top: 12px; }
-    footer { margin-top: 18px; color: #666; font-size: 12px; max-width: 900px; }
+    :root{
+      --max: 980px;
+      --border: #e8e3d7;
+      --bg: #fbf7ef;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --honey: #c08a1a;
+      --honey2: #f3c969;
+      --shadow: 0 10px 30px rgba(31,41,55,0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 400px at 20% -10%, rgba(243,201,105,0.35), transparent 60%),
+        radial-gradient(900px 350px at 90% 10%, rgba(192,138,26,0.20), transparent 55%),
+        var(--bg);
+      line-height: 1.5;
+    }
+
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px 18px 34px;
+    }
+
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(6px);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 160px;
+    }
+
+    .brand img{
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .brand .name{
+      display:flex;
+      flex-direction:column;
+      line-height: 1.1;
+    }
+
+    .brand .name strong{
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+
+    .brand .name span{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    nav{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+
+    nav a{
+      text-decoration:none;
+      color: var(--text);
+      font-size: 13px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    nav a:hover{
+      background: rgba(243,201,105,0.20);
+      border-color: rgba(192,138,26,0.20);
+    }
+
+    nav a.active{
+      background: rgba(192,138,26,0.12);
+      border-color: rgba(192,138,26,0.25);
+      font-weight: 700;
+    }
+
+    /* Hero */
+    .hero{
+      margin-top: 14px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: #111;
+      position: relative;
+      min-height: 240px;
+    }
+
+    .hero img{
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display:block;
+      opacity: 0.92;
+      transform: scale(1.01);
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(to top, rgba(17,24,39,0.75), rgba(17,24,39,0.20));
+    }
+
+    .hero-content{
+      position:absolute;
+      inset: 0;
+      z-index: 1;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding: 16px 16px 16px;
+      color: #fff;
+    }
+
+    .hero h1{
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 0.2px;
+    }
+
+    .hero p{
+      margin: 8px 0 0;
+      max-width: 70ch;
+      color: rgba(255,255,255,0.92);
+      font-size: 14px;
+    }
+
+    .pill{
+      margin-top: 10px;
+      width: fit-content;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.22);
+      font-size: 12px;
+      color: rgba(255,255,255,0.95);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Grid + cards */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 900px){
+      .grid{
+        grid-template-columns: 1.3fr 0.7fr;
+        align-items: start;
+      }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2{
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+
+    .subtle{
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Table */
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    th, td{
+      border-bottom: 1px solid var(--border);
+      padding: 11px 10px;
+      text-align: left;
+    }
+
+    th{
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(251,247,239,0.9);
+    }
+
+    tr:last-child td{
+      border-bottom: none;
+    }
+
+    .right{
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Notice */
+    .notice{
+      background: linear-gradient(180deg, rgba(243,201,105,0.18), rgba(255,255,255,1));
+    }
+
+    .notice strong{
+      color: #7a5200;
+    }
+
+    .error{
+      color: #b00020;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    footer{
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    footer a{ color: inherit; }
   </style>
 </head>
+
 <body>
-  <nav style="max-width:900px; margin-bottom:16px;">
-    <a href="./index.html" style="margin-right:12px; text-decoration:none;"><strong>Inicio</strong></a>
-    <a href="./metodologia.html" style="margin-right:12px; text-decoration:none;">Metodología</a>
-    <a href="./aviso-legal.html" style="text-decoration:none;">Aviso legal</a>
-  </nav>
+  <div class="wrap">
 
-  <header>
-    <h1>Indicador orientativo de precios de miel</h1>
-    <div class="note">
-      <strong>Aviso importante:</strong> Datos con carácter meramente informativo y orientativo. No constituyen precios oficiales ni referencia de mercado.
-      El titular de la web no asume responsabilidad por el uso que terceros puedan hacer de esta información.
-      <div class="meta" id="actualizacion">Actualización: —</div>
+    <div class="topbar">
+      <div class="brand">
+        <!-- Si aún no tienes logo, deja este <img> y sube img/logo.png más tarde -->
+        <img src="./img/logo.png" alt="Logo" onerror="this.style.display='none'" />
+        <div class="name">
+          <strong>IndicadorPrecios</strong>
+          <span>Miel</span>
+        </div>
+      </div>
+
+      <nav>
+        <a class="active" href="./index.html">Inicio</a>
+        <a href="./metodologia.html">Metodología</a>
+        <a href="./aviso-legal.html">Aviso legal</a>
+      </nav>
     </div>
-  </header>
 
-  <table id="tabla">
-    <thead>
-      <tr>
-        <th>Tipo de miel</th>
-        <th class="right">Precio mín (€ / kg)</th>
-        <th class="right">Precio máx (€ / kg)</th>
-        <th>Periodo</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <section class="hero">
+      <img src="./img/hero.jpg" alt="Colmenas y entorno apícola" />
+      <div class="hero-content">
+        <h1>Indicador orientativo de precios</h1>
+        <div class="pill" id="actualizacion">Actualización: —</div>
+        <p>
+          Miel · Rangos agregados con carácter informativo. No constituye cotización oficial ni referencia de mercado.
+        </p>
+      </div>
+    </section>
 
-  <div class="error" id="error"></div>
+    <div class="grid">
+      <section class="card">
+        <h2>Tabla de precios</h2>
 
-  <footer>
-    Metodología (resumen): valores agregados en forma de rangos, pensados para orientar.
-  </footer>
+        <table id="tabla">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th class="right">Mín (€ / kg)</th>
+              <th class="right">Máx (€ / kg)</th>
+              <th>Periodo</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div class="error" id="error"></div>
+      </section>
+
+      <aside class="card notice">
+        <h2>Aviso importante</h2>
+        <p class="subtle">
+          <strong>Datos orientativos:</strong> no constituyen precios oficiales ni referencia de mercado.
+          El titular de la web no asume responsabilidad por el uso que terceros puedan hacer de esta información.
+        </p>
+        <p class="subtle" style="margin: 10px 0 0;">
+          Recomendación: publicar rangos y periodos semanales para reducir interpretaciones “en tiempo real”.
+        </p>
+      </aside>
+    </div>
+
+    <footer>
+      Consejo práctico: para actualizar, sustituye <strong>precios.csv</strong>.
+    </footer>
+
+  </div>
 
   <script>
     const CSV_URL = "./precios.csv";
@@ -86,7 +370,6 @@
         const text = await res.text();
         const rows = parseCSV(text);
 
-        // Tabla
         for (const r of rows) {
           const tr = document.createElement("tr");
 
@@ -111,7 +394,6 @@
           tbody.appendChild(tr);
         }
 
-        // Actualización DESDE EL CSV (campo "actualizado")
         const actualizado = (rows[0] && rows[0].actualizado) ? rows[0].actualizado : "";
         document.getElementById("actualizacion").textContent = "Actualización: " + (actualizado || "—");
 
