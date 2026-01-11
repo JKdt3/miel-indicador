@@ -54,21 +54,21 @@
     .brand{
       display:flex;
       align-items:center;
-      gap: 14px;
-      min-width: 260px;
+      gap: 0;
+      min-width: 0;
     }
 
  .brand img{
-  width: 92px;
-  height: 92px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
-  background: rgba(255,255,255,0.60);
+  background: rgba(255,255,255,0.70);
   border: 1px solid rgba(192,138,26,0.28);
-  padding: 14px;
+  padding: 18px;
   border-radius: 999px;
 filter:
-    drop-shadow(0 10px 18px rgba(31,41,55,0.18))
-    contrast(1.08);
+    drop-shadow(0 12px 22px rgba(31,41,55,0.18))
+    contrast(1.10);
 }
 
     .brand .name{
@@ -269,21 +269,23 @@ filter:
     }
 
     footer a{ color: inherit; }
+
+@media (max-width: 560px){
+  .brand img{
+    width: 96px;
+    height: 96px;
+    padding: 14px;
+  }
+}
   </style>
 </head>
 
 <body>
   <div class="wrap">
 
-    <div class="topbar">
-      <div class="brand">
-        <!-- Si aún no tienes logo, deja este <img> y sube img/logo.png más tarde -->
-        <img src="./img/logo.png" alt="Logo" onerror="this.style.display='none'" />
-        <div class="name">
-          <strong>IndicadorPrecios</strong>
-          <span>Miel</span>
-        </div>
-      </div>
+    <div class="brand">
+  <img src="./img/logo.png" alt="Logo IndicadorPrecios" onerror="this.style.display='none'" />
+</div>
 
       <nav>
         <a class="active" href="./index.html">Inicio</a>
