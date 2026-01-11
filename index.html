@@ -13,8 +13,6 @@
       --card: #ffffff;
       --text: #1f2937;
       --muted: #6b7280;
-      --honey: #c08a1a;
-      --honey2: #f3c969;
       --shadow: 0 10px 30px rgba(31,41,55,0.08);
     }
 
@@ -43,7 +41,8 @@
       align-items:center;
       justify-content:space-between;
       gap: 14px;
-      padding: 10px 12px;
+      padding: 10px 14px;
+      min-height: 76px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,0.75);
       backdrop-filter: blur(6px);
@@ -54,38 +53,19 @@
     .brand{
       display:flex;
       align-items:center;
-      gap: 0;
       min-width: 0;
     }
 
- .brand img{
-  width: 120px;
-  height: 120px;
-  object-fit: contain;
-  background: rgba(255,255,255,0.70);
-  border: 1px solid rgba(192,138,26,0.28);
-  padding: 18px;
-  border-radius: 999px;
-filter:
-    drop-shadow(0 12px 22px rgba(31,41,55,0.18))
-    contrast(1.10);
-}
-
-    .brand .name{
-      display:flex;
-      flex-direction:column;
-      line-height: 1.1;
-    }
-
-    .brand .name strong{
-      font-size: 15px;
-      letter-spacing: 0.3px;
-    }
-
-    .brand .name span{
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
+    /* Logo "sello" visible pero controlado */
+    .brand img{
+      width: 84px;
+      height: 84px;
+      object-fit: contain;
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(192,138,26,0.22);
+      padding: 12px;
+      border-radius: 999px;
+      filter: drop-shadow(0 10px 18px rgba(31,41,55,0.16)) contrast(1.08);
     }
 
     nav{
@@ -93,6 +73,7 @@ filter:
       gap: 10px;
       flex-wrap: wrap;
       justify-content:flex-end;
+      align-items:center;
     }
 
     nav a{
@@ -140,8 +121,7 @@ filter:
       content:"";
       position:absolute;
       inset:0;
-      background:
-        linear-gradient(to top, rgba(17,24,39,0.75), rgba(17,24,39,0.20));
+      background: linear-gradient(to top, rgba(17,24,39,0.75), rgba(17,24,39,0.20));
     }
 
     .hero-content{
@@ -151,7 +131,7 @@ filter:
       display:flex;
       flex-direction:column;
       justify-content:flex-end;
-      padding: 16px 16px 16px;
+      padding: 16px;
       color: #fff;
     }
 
@@ -268,24 +248,28 @@ filter:
       text-align: center;
     }
 
-    footer a{ color: inherit; }
-
-@media (max-width: 560px){
-  .brand img{
-    width: 96px;
-    height: 96px;
-    padding: 14px;
-  }
-}
+    /* Móvil: compactar logo y barra */
+    @media (max-width: 560px){
+      .brand img{
+        width: 68px;
+        height: 68px;
+        padding: 10px;
+      }
+      .topbar{
+        min-height: 64px;
+        padding: 10px 12px;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
 
-    <div class="brand">
-  <img src="./img/logo.png" alt="Logo IndicadorPrecios" onerror="this.style.display='none'" />
-</div>
+    <div class="topbar">
+      <div class="brand">
+        <img src="./img/logo.png" alt="Logo IndicadorPrecios" onerror="this.style.display='none'" />
+      </div>
 
       <nav>
         <a class="active" href="./index.html">Inicio</a>
@@ -299,9 +283,7 @@ filter:
       <div class="hero-content">
         <h1>Indicador orientativo de precios</h1>
         <div class="pill" id="actualizacion">Actualización: —</div>
-        <p>
-          Miel · Rangos agregados con carácter informativo y no vinculante.
-        </p>
+        <p>Miel · Rangos agregados con carácter informativo y no vinculante.</p>
       </div>
     </section>
 
@@ -327,16 +309,13 @@ filter:
       <aside class="card notice">
         <h2>Aviso importante</h2>
         <p class="subtle">
-          <strong>Datos orientativos:</strong> no constituyen precios oficiales.
+          <strong>Datos orientativos:</strong> no constituyen precios oficiales ni referencia de mercado.
           El titular de la web no asume responsabilidad por el uso que terceros puedan hacer de esta información.
         </p>
-        
       </aside>
     </div>
 
-    <footer>
-      Indicador de carácter informativo.
-    </footer>
+    <footer>Indicador de carácter informativo.</footer>
 
   </div>
 
